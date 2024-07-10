@@ -10,6 +10,7 @@ use App\Services\AuthService;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\GetOtpRequest;
 use App\Http\Requests\Auth\VerifyOtpRequest;
+use App\Http\Requests\Auth\PatientSignupRequest;
 
 
 
@@ -20,6 +21,13 @@ class AuthController extends Controller
         private readonly AuthService $authService
     )
     {}
+
+    public function patientSignup(PatientSignupRequest $request) : JsonResponse
+    {
+        $result = $this->authService->patientSignup((object) $request->validated());
+
+        return response()->json($result, Response::HTTP_CREATED);
+    }
 
     public function login(LoginRequest $request) : JsonResponse
     {

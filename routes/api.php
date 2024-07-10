@@ -27,6 +27,7 @@ Route::prefix('v1')->middleware('verify.api-key')->group(function () {
     Route::prefix('auth')->group(function () {
         Route::post('login', [AuthController::class, 'login'])->name('auth.login');
         Route::post('request-otp', [AuthController::class, 'requestOtp'])->name('auth.request-otp');
+        Route::post('patient-signup', [AuthController::class, 'patientSignup'])->name('auth.patient-signup');
 
         Route::middleware('auth:sanctum')->group(function () {
             Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');

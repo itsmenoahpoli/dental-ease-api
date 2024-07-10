@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Repositories\Admin;
+namespace App\Repositories\Patients;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Repositories\BaseRepository;
 
-class RolesRepository extends BaseRepository
+class PatientInformationsRepository extends BaseRepository
 {
     public function __construct(
         private readonly Model $model,
@@ -18,12 +18,6 @@ class RolesRepository extends BaseRepository
             $model,
             $relationships,
             $shownRelationshipsInList,
-            ['name']
         );
-    }
-
-    public function findByName($name)
-    {
-        return $this->model->query()->where('name', $name)->first();
     }
 }

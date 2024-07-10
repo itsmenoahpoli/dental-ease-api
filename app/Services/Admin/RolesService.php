@@ -11,4 +11,9 @@ class RolesService extends RolesRepository
     {
         parent::__construct($model, ['users'], []);
     }
+
+    public function findByName($name)
+    {
+        return parent::findByName($name);
+    }
 }
