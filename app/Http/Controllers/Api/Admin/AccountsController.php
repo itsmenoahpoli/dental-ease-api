@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Response;
 use App\Helpers\ParamsHelpers;
 use App\Services\Admin\AccountsService;
@@ -54,6 +55,11 @@ class AccountsController extends Controller
     public function show(string $id) : JsonResponse
     {
         $result = $this->service->getById($id);
+
+        if (!$result)
+        {
+            throw new NotFoundHttpException('NOT_FOUND');
+        }
 
         return response()->json($result, Response::HTTP_OK);
     }
