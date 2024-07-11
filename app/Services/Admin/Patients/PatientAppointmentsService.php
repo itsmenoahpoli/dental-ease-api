@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services\Patients;
+namespace App\Services\Admin\Patients;
 
 use App\Models\Patients\PatientRecord;
-use App\Repositories\Patients\PatientRecordsRepository;
+use App\Repositories\Patients\PatientAppointmentsRepository;
 
-class PatientRecordsService extends PatientRecordsRepository
+class PatientAppointmentsService extends PatientAppointmentsRepository
 {
     public function __construct(PatientRecord $model)
     {

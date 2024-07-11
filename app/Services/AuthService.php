@@ -11,7 +11,7 @@ use App\Models\User;
 use App\Models\UserSession;
 use App\Models\UserOtp;
 use App\Services\Admin\RolesService;
-use App\Services\Patients\PatientInformationsService;
+use App\Services\Admin\Patients\PatientInformationsService;
 
 class AuthService {
     public function __construct(

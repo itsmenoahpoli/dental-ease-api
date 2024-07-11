@@ -5,7 +5,7 @@ namespace App\Repositories\Patients;
 use Illuminate\Database\Eloquent\Model;
 use App\Repositories\BaseRepository;
 
-class PatientRecordsRepository extends BaseRepository
+class PatientAppointmentsRepository extends BaseRepository
 {
     public function __construct(
         private readonly Model $model,

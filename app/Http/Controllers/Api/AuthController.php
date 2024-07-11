@@ -56,4 +56,12 @@ class AuthController extends Controller
 
         return response()->json($result, Response::HTTP_OK);
     }
+
+    public function me(Request $request) : JsonResponse
+    {
+        $result = $request->user();
+
+        return response()->json($result, Response::HTTP_OK);
+
+    }
 }
