@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\SystemController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\PaymentsController;
 use App\Http\Controllers\Api\Admin\AccountsController;
 use App\Http\Controllers\Api\Admin\RolesController;
 use App\Http\Controllers\Api\Admin\Patients\PatientAppointmentsController;
@@ -35,6 +36,13 @@ Route::prefix('v1')->middleware('verify.api-key')->group(function () {
             Route::get('me', [AuthController::class, 'me'])->name('auth.me');
             Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
         });
+    });
+
+    /**
+     * Payment Routes
+     */
+    Route::prefix('payments')->group(function() {
+        Route::post('paymongo/pay', [PaymentsController::class, 'paymongoCreatePayment'])->name('payments.paymongo-pay');
     });
 
     /**
