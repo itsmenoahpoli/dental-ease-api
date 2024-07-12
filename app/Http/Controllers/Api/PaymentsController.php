@@ -17,7 +17,7 @@ class PaymentsController extends Controller
 
     public function paymongoCreatePayment(Request $request)
     {
-        $result = $this->paymentsService->createPayment();
+        $result = $this->paymentsService->createPayment(200, '', '');
 
         return response()->json($result, Response::HTTP_CREATED);
     }

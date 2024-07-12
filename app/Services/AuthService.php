@@ -23,11 +23,11 @@ class AuthService {
     )
     {}
 
-    private function checkEmailAvailability($email)
+    private function _checkEmailAvailability($email)
     {
         $checkEmail = $this->user->query()->where('email', $email)->first();
 
-        if ($checkEmail) 
+        if ($checkEmail)
         {
             return true;
         }
@@ -35,7 +35,7 @@ class AuthService {
         return false;
     }
 
-    private function createSessionLog($user)
+    private function _createSessionLog($user)
     {
         $sessionId = Str::random(10);
 
@@ -48,7 +48,7 @@ class AuthService {
         ]);
     }
 
-    private function endSessionLog($sessionId)
+    private function _endSessionLog($sessionId)
     {
         return $this->userSession
                 ->where('session_id', $sessionId)
@@ -59,9 +59,9 @@ class AuthService {
 
     public function patientSignup($data)
     {
-        if ($this->checkEmailAvailability($data->account_data['email'])) 
+        if ($this->_checkEmailAvailability($data->account_data['email']))
         {
-            throw new HttpException(400, 'EMAIL_ALREADY_USED'); 
+            throw new HttpException(400, 'EMAIL_ALREADY_USED');
         }
 
         DB::beginTransaction();
@@ -82,14 +82,14 @@ class AuthService {
                 array_merge(
                     [
                         'user_id' => $user->id,
-                        
+
                     ],
                     $data->patient_information
                 )
             );
 
             DB::commit();
-    
+
             return [
                 'user'                  => $user,
                 'patient_information'   => $patient_information
@@ -99,7 +99,7 @@ class AuthService {
             DB::rollBack();
         }
 
-        
+
     }
 
     public function authenticate($credentials)
@@ -112,7 +112,7 @@ class AuthService {
             $user = Auth::user();
             $user->load('user_role');
             $token = $user->createToken(now()->timestamp)->plainTextToken;
-            $session = $this->createSessionLog($user);
+            $session = $this->_createSessionLog($user);
 
             return (object) array(
                 'token'     => $token,
@@ -127,7 +127,7 @@ class AuthService {
     public function unauthenticate($user, $sessionId)
     {
         $user->currentAccessToken()->delete();
-        $session = $this->endSessionLog($sessionId);
+        $session = $this->_endSessionLog($sessionId);
 
         return $session;
     }

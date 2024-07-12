@@ -4,14 +4,17 @@ namespace App\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Repositories\BaseRepositoryInterface;
+use App\Observers\BaseModelObserver;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class BaseRepository implements BaseRepositoryInterface
 {
     private $eloquentModel;
+    private $cacheTTL = 60;
 
     public function __construct(
         private readonly Model $model,
+        private readonly $cacheKey,
         private readonly array $relationships,
         private readonly array $showRelationshipsInList,
         private readonly array $searchFilters = [],
@@ -20,6 +23,9 @@ class BaseRepository implements BaseRepositoryInterface
     )
     {
         $this->eloquentModel = $this->model->query();
+        $this->model::observe(new BaseModelObserver(
+            $this->cacheKey
+        ));
     }
 
     public function getListUsingQueryBuilder()
