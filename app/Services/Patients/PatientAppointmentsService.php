@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Admin\Patients;
+namespace App\Services\Patients;
 
 use App\Models\Patients\PatientRecord;
 use App\Repositories\Patients\PatientAppointmentsRepository;

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Admin\AccountsController;
 use App\Http\Controllers\Api\Admin\RolesController;
 use App\Http\Controllers\Api\Admin\Patients\PatientAppointmentsController;
+use App\Http\Controllers\Api\Admin\Patients\PatientInformationsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,7 +57,8 @@ Route::prefix('v1')->middleware('verify.api-key')->group(function () {
          * Patients data
          */
         Route::apiResources([
-            'patient-appointments' => PatientAppointmentsController::class
+            'patient-appointments' => PatientAppointmentsController::class,
+            'patient-informations' => PatientInformationsController::class
         ]);
     });
 });

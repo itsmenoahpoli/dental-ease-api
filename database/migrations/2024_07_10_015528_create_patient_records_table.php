@@ -29,6 +29,7 @@ return new class extends Migration
         Schema::create('patient_records', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->string('document_filepath');
             $table->enum('record_type', $this->recordTypesEnum);
             $table->enum('status', $this->statusEnum);
             $table->timestamps();

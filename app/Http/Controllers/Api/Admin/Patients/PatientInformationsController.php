@@ -8,14 +8,14 @@ use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Response;
 use App\Helpers\ParamsHelpers;
-use App\Services\Patients\PatientAppointmentsService;
-use App\Http\Requests\Admin\Patients\CreateAppointmentRequest;
-use App\Http\Requests\Admin\Patients\UpdateAppointmentRequest;
+use App\Services\Patients\PatientInformationsService;
+use App\Http\Requests\Admin\Patients\CreateInformationRequest;
+use App\Http\Requests\Admin\Patients\UpdateInformationRequest;
 
-class PatientAppointmentsController extends Controller
+class PatientInformationsController extends Controller
 {
     public function __construct(
-        private readonly PatientAppointmentsService $service
+        private readonly PatientInformationsService $service
     )
     {}
 
@@ -40,7 +40,7 @@ class PatientAppointmentsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CreateAppointmentRequest $request)
+    public function store(CreateInformationRequest $request)
     {
         $result = $this->service->create(
             $request->validated()
@@ -67,7 +67,7 @@ class PatientAppointmentsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAppointmentRequest $request, string $id) : JsonResponse
+    public function update(UpdateInformationRequest $request, string $id) : JsonResponse
     {
         $result = $this->service->updateById(
             $id,
