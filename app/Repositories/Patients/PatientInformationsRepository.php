@@ -16,8 +16,11 @@ class PatientInformationsRepository extends BaseRepository
     {
         parent::__construct(
             $model,
+            'patient-information-model',
             $relationships,
             $shownRelationshipsInList,
+            [],
+            []
         );
     }
 }

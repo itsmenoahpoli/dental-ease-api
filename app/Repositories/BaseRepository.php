@@ -3,9 +3,13 @@
 namespace App\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Spatie\QueryBuilder\QueryBuilder;
 use App\Repositories\BaseRepositoryInterface;
 use App\Observers\BaseModelObserver;
-use Spatie\QueryBuilder\QueryBuilder;
+use Illuminate\Support\Facades\File;
 
 class BaseRepository implements BaseRepositoryInterface
 {
@@ -14,7 +18,7 @@ class BaseRepository implements BaseRepositoryInterface
 
     public function __construct(
         private readonly Model $model,
-        private readonly $cacheKey,
+        private string $cacheKey,
         private readonly array $relationships,
         private readonly array $showRelationshipsInList,
         private readonly array $searchFilters = [],
@@ -23,9 +27,9 @@ class BaseRepository implements BaseRepositoryInterface
     )
     {
         $this->eloquentModel = $this->model->query();
-        $this->model::observe(new BaseModelObserver(
-            $this->cacheKey
-        ));
+        $this->model::observe(function() {
+            return new BaseModelObserver($this->cacheKey);
+        });
     }
 
     public function getListUsingQueryBuilder()
@@ -44,28 +48,56 @@ class BaseRepository implements BaseRepositoryInterface
     {
         $result = $this->eloquentModel->with($this->showRelationshipsInList)->orderBy($orderBy, $sortBy)->paginate($pageSize);
 
-        return $result;
+        return Cache::remember($this->cacheKey, $this->cacheTTL, function () use ($result) {
+                return $result;
+            }
+        );
     }
 
     public function getUnpaginated($orderBy = 'id', $sortBy = 'desc')
     {
         $result = $this->eloquentModel->with($this->showRelationshipsInList)->orderBy($orderBy, $sortBy)->get();
 
-        return $result;
+        return Cache::remember($this->cacheKey, $this->cacheTTL, function () use ($result) {
+                return $result;
+            }
+        );
     }
 
     public function create($data)
     {
-        $result = $this->model->create($data);
+        DB::beginTransaction();
 
-        return $result;
+        try
+        {
+            $result = $this->model->create($data);
+
+            DB::commit();
+
+            return $result;
+        } catch (\Exception $err)
+        {
+            DB::rollback();
+            throw new HttpException(500, $err->getMessage());
+        }
     }
 
     public function updateById($id, $data)
     {
-        $result = tap($this->model->find($id))->update($data)->first();
+        DB::beginTransaction();
 
-        return $result;
+        try
+        {
+            $result = tap($this->model->find($id))->update($data)->first();
+
+            DB::commit();
+
+            return $result;
+        } catch (\Exception $err)
+        {
+            DB::rollback();
+            throw new HttpException(500, $err->getMessage());
+        }
     }
 
     public function getById($id)
@@ -77,8 +109,19 @@ class BaseRepository implements BaseRepositoryInterface
 
     public function deleteById($id)
     {
-        $result = $this->model->findOrFail($id)->delete();
+        DB::beginTransaction();
 
-        return $result;
+        try
+        {
+            $result = $this->model->findOrFail($id)->delete();
+
+            DB::commit();
+
+            return $result;
+        } catch (\Exception $err)
+        {
+            DB::rollback();
+            throw new HttpException(500, $err->getMessage());
+        }
     }
 }

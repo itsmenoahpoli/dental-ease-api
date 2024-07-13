@@ -11,7 +11,7 @@ class CreateRoleRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class CreateRoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name'          => 'string|required|unique:user_roles',
+            'is_enabled'    => 'boolean|nullable'
         ];
     }
 }

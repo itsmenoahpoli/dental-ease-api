@@ -16,8 +16,11 @@ class PatientAppointmentsRepository extends BaseRepository
     {
         parent::__construct(
             $model,
+            'patient-appointment-model',
             $relationships,
             $shownRelationshipsInList,
+            [],
+            []
         );
     }
 }
