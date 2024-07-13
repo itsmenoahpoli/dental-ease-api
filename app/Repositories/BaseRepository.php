@@ -9,7 +9,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Spatie\QueryBuilder\QueryBuilder;
 use App\Repositories\BaseRepositoryInterface;
 use App\Observers\BaseModelObserver;
-use Illuminate\Support\Facades\File;
 
 class BaseRepository implements BaseRepositoryInterface
 {
