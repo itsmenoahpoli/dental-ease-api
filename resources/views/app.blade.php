@@ -6,6 +6,6 @@
         <title>Application</title>
     </head>
     <body>
-        <noscript>You need to enable javascript to use this app</noscript>
+        <h1>DentalEase Server API</h1>
     </body>
 </html>
